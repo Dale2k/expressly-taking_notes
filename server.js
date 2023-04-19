@@ -24,8 +24,12 @@ app.get("*", (req, res) => {
 });
 
 //GET /api/notes should read the db.json file and return all saved notes as JSON.
-
-// Delete route
+app.get("/api/notes", (req, res) => {
+  fs.readFile(path.join(__dirname, "./db/db.json"), (err, data) => {
+    if (err) throw err;
+    res.json(JSON.parse(data));
+  });
+});
 
 // POST /api/notes
 
