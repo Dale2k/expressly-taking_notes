@@ -32,8 +32,31 @@ app.get("/api/notes", (req, res) => {
 });
 
 // POST /api/notes
+// add it to the db.json file, and then return the new note to the client.
 
-//  Port
+app.post("/api/notes", (req, res) => {
+  let db = fs.readFileSync("db/db.json");
+
+  db = JSON.parse(db);
+
+  res.json(db);
+
+  let userNote = {
+    title: req.body.title,
+
+    text: req.body.text,
+
+    id: uniqid(),
+  };
+
+  db.push(userNote);
+
+  fs.writeFileSync("db/db.json", JSON.stringify(db));
+
+  res.json(db);
+});
+
+//  Port.
 app.listen(PORT, () =>
   console.log(`The server is now listening on PORT ${PORT}`)
 );
