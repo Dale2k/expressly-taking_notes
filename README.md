@@ -4,10 +4,13 @@
 
 [Heroku application secret-island](https://secret-island-81595.herokuapp.com/)
 
+https://secret-island-81595.herokuapp.com/
 
 - The URL of the GitHub repository,
 
 [expressly-taking_notes repository](https://github.com/Dale2k/expressly-taking_notes)
+
+https://github.com/Dale2k/expressly-taking_notes
 
 ## Description
 
