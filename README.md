@@ -2,6 +2,9 @@
 
 - The URL of the functional, deployed application.
 
+[Heroku application secret-island](https://secret-island-81595.herokuapp.com/)
+
+
 - The URL of the GitHub repository,
 
 [expressly-taking_notes repository](https://github.com/Dale2k/expressly-taking_notes)
@@ -33,7 +36,7 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 ## Installation
 
-Heroku deployed application
+[Heroku application secret-island](https://secret-island-81595.herokuapp.com/)
 
 ## License
 
