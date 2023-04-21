@@ -2,6 +2,15 @@
     {
         "title": "Test Title",
         "text": "Test text"
+    },
+    {
+        "title": "Netflix to watch",
+        "text": "Business Proposal, Hotel del Luna, Tomorrow",
+        "id": "bc975c9d-a868-4d45-b64f-1c299082a83e"
+    },
+    {
+        "title": "Lunch with friends",
+        "text": "123 Main, Friday 6pm",
+        "id": "7f1ce575-4630-434c-b495-5ddd8caff774"
     }
-    
 ]
