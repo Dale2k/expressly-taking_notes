@@ -1,62 +1,83 @@
-// configuration
-const express = require("express");
-const uuid = require("./public/uuid");
-const fs = require("fs");
-const path = require("path");
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const notes = require('./db/db.json');
+const { v4: uuidv4 } = require('uuid');
+
+const PORT = process.env.PORT || 3001;
+// Heroku port address
 
 const app = express();
 
-const PORT = process.env.PORT || 3001;
-
-//middleware
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-// GET /notes should return the notes.html file
-app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/notes.html"));
-});
-
-// GET * should return the index.html file.
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/index.html"));
-});
-
-//GET /api/notes should read the db.json file and return all saved notes as JSON.
-app.get("/api/notes", (req, res) => {
-  fs.readFile(path.join(__dirname, "./db/db.json"), (err, data) => {
-    if (err) throw err;
-    res.json(JSON.parse(data));
-  });
-});
-
-// POST /api/notes
-// add it to the db.json file, and then return the new note to the client.
-
-app.post("/api/notes", (req, res) => {
-  let db = fs.readFileSync("db/db.json");
-
-  db = JSON.parse(db);
-
-  res.json(db);
-
-  let userNote = {
-    title: req.body.title,
-
-    text: req.body.text,
-
-    id: uniqid(),
-  };
-
-  db.push(userNote);
-
-  fs.writeFileSync("db/db.json", JSON.stringify(db));
-
-  res.json(db);
-});
-
-//  Port.
-app.listen(PORT, () =>
-  console.log(`The server is now listening on PORT ${PORT}`)
+// default route
+app.get('/', (req, res) =>
+    res.sendFile(path.join(__dirname, '/public/index.html'))
 );
+
+// GET route for notes page
+app.get('/notes', (req, res) =>
+    res.sendFile(path.join(__dirname, '/public/notes.html'))
+);
+
+// GET request for api notes
+app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(JSON.parse(data));
+        }
+    })
+
+    
+});
+
+// POST request for notes
+app.post('/api/notes', (req, res) => {
+   
+
+    const {title, text} = req.body;
+
+    if (title && text) {
+        const newNote = {
+            title,
+            text,
+            id: uuidv4()
+        }
+
+        fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+            if (err) {
+                console.log(err);
+            } else {
+                const parsedNotes = JSON.parse(data);
+                parsedNotes.push(newNote)
+                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 4), (err) => {
+                    err ? console.log(err) : console.log('successfully added note')
+                })
+            }
+        })
+
+        const response = {
+            status: 'success',
+            body: newNote
+        }
+
+        console.log(response);
+        res.json(response);
+    } else {
+        res.json('unable to post note')
+    }
+})
+
+// Wildcard route to direct users to index.html
+app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, 'public/index.html'))
+);
+
+app.listen(PORT, () => {
+    console.log(`app is running on port ${PORT}`);
+})
